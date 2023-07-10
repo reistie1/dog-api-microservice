@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<PlatformTarget>x64</PlatformTarget>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Bogus" Version="34.0.2" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.8" />
+		<PackageReference Include="Moq" Version="4.18.4" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="../Dog.Api.Core/Dog.Api.Core.csproj" />
+		<ProjectReference Include="../Dog.Api/Dog.Api.csproj" />
+		<ProjectReference Include="../Dog.Api.Infrastructure/Dog.Api.Infrastructure.csproj"></ProjectReference>
+	</ItemGroup>
+
+</Project>

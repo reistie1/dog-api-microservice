@@ -1,0 +1,38 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+	<ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>260acf6b-b7d4-43cc-afc0-7b897378d51e</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="7.0.1" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Autofac.Mvc5" Version="6.1.0" />
+    <PackageReference Include="Autofac.WebApi2" Version="6.1.1" />
+	<PackageReference Include="FluentValidation" Version="11.6.0" />
+	<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.6.0" />
+	<PackageReference Include="MediatR" Version="12.1.1" />
+	<PackageReference Include="MediatR.Extensions.Autofac.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.8" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.8" />
+	<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    <PackageReference Include="Serilog" Version="3.0.1" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.5.0" />
+    <PackageReference Include="Serilog.Sinks.Seq" Version="5.2.2" />
+    <PackageReference Include="Splitio" Version="7.4.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Dog.Api.Core/Dog.Api.Core.csproj"></ProjectReference>
+	<ProjectReference Include="../Dog.Api.Infrastructure/Dog.Api.Infrastructure.csproj"></ProjectReference>
+  </ItemGroup>
+
+</Project>
