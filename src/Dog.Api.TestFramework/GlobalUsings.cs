@@ -1,5 +1,16 @@
 ﻿global using Microsoft.AspNetCore.Hosting;
 global using Microsoft.AspNetCore.Mvc.Testing;
+global using Microsoft.AspNetCore.TestHost;
 global using Microsoft.EntityFrameworkCore;
+global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.DependencyInjection.Extensions;
+global using Microsoft.Extensions.Options;
+global using System.Reflection;
+global using Bogus;
+global using Dog.Api.Application;
+global using Dog.Api.Core.Models;
+global using Dog.Api.Core.Options;
 global using Dog.Api.Infrastructure.Contexts;
+global using Dog.Api.TestFramework.Fixtures;
+global using Dog.Api.TestFramework.RuleCollections;

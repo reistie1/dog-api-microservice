@@ -38,16 +38,16 @@ public class RandomBreedImageByBreedCommandValidator : AbstractValidator<RandomB
     public RandomBreedImageByBreedCommandValidator() 
     {
         RuleFor(x => x.PageNumber)
-            .GreaterThanOrEqualTo(0).WithMessage(Constants.ErrorMessages.PageNumberTooSmall)
+            .GreaterThanOrEqualTo(1).WithMessage(Constants.ErrorMessages.PageNumberTooSmall)
             .NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPageNumber);
 
         RuleFor(x => x.PageSize)
-            .GreaterThanOrEqualTo(0).WithMessage(Constants.ErrorMessages.PageSizeTooSmall)
+            .GreaterThanOrEqualTo(1).WithMessage(Constants.ErrorMessages.PageSizeTooSmall)
             .LessThanOrEqualTo(20).WithMessage(Constants.ErrorMessages.PageSizeTooLarge)
             .NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPageSize);
 
         RuleFor(x => x.Breed)
-            .Matches(new Regex("^[a-zA-Z]+$")).WithMessage(Constants.ErrorMessages.InvalidSearchFormat)
+            .Matches(new Regex(Constants.Validators.SearchRegex)).WithMessage(Constants.ErrorMessages.InvalidSearchFormat)
             .When(x => x.Breed != null);
     }
 }
@@ -84,12 +84,12 @@ public class RandomBreedImageByBreedService : IRandomBreedImageByBreedService
 
         if (result != null)
         {
-            listResponse.List = result.message
+            listResponse.List = result.Message
                 .Where(x => x.Contains(request.Breed, StringComparison.OrdinalIgnoreCase))
                 .Skip(request.PageSize * (request.PageNumber - 1))
                 .Take(request.PageSize)
                 .ToList();
-            listResponse.Count = result.message.Count();
+            listResponse.Count = result.Message.Count();
 
             return listResponse;
         }

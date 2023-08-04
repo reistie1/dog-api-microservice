@@ -4,11 +4,13 @@ public class DatabaseHelper
 {
     private readonly IdentityContext _identityContext;
     private readonly ILogger<DatabaseHelper> _logger;
+	private readonly IPasswordHasher _passwordHasher;
 
-    public DatabaseHelper(IdentityContext identityContext, ILogger<DatabaseHelper> logger)
+	public DatabaseHelper(IdentityContext identityContext, ILogger<DatabaseHelper> logger, IPasswordHasher passwordHasher)
     {
         _identityContext = identityContext ?? throw new ArgumentNullException(nameof(identityContext));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+		_passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
     }
 
     public void CreateDatabase()
@@ -29,7 +31,6 @@ public class DatabaseHelper
     {
         try
         {
-            var passwordHasher = new PasswordHasher<User>();
             var roleStore = new RoleStore<Role, IdentityContext, Guid>(_identityContext);
             var userStore = new UserStore<User, Role, IdentityContext, Guid>(_identityContext);
 
@@ -61,13 +62,13 @@ public class DatabaseHelper
                 {
                     if (string.Equals(user.Email, Constants.AdminUser.Email, StringComparison.OrdinalIgnoreCase))
                     {
-                        user.PasswordHash = passwordHasher.HashPassword(user, Constants.AdminUser.Password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, Constants.AdminUser.Password);
                         await userStore.CreateAsync(user);
                         await userStore.AddToRoleAsync(user, Constants.AdminRole.Admin.ToUpper());
                     }
                     else
                     {
-                        user.PasswordHash = passwordHasher.HashPassword(user, Constants.User.Password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, Constants.User.Password);
                         await userStore.CreateAsync(user);
                         await userStore.AddToRoleAsync(user, Constants.UserRole.User.ToUpper());
                     }

@@ -16,7 +16,6 @@ global using System.Text.Json.Serialization;
 global using System.Text.RegularExpressions;
 global using Autofac;
 global using Autofac.Extensions.DependencyInjection;
-global using Autofac.Integration.Mvc;
 global using FluentValidation;
 global using MediatR;
 global using MediatR.Extensions.Autofac.DependencyInjection;

@@ -3,7 +3,10 @@ var builder = WebApplication.CreateBuilder(args);
 var environment = builder.Environment.EnvironmentName;
 
 var configuration = new ConfigurationBuilder()
-    .AddJsonFile($"appsettings.{environment}.json")
+	.AddJsonFile("appsettings.json", false)
+	.AddJsonFile($"appsettings.{environment}.json", false)
+	.AddUserSecrets(Assembly.GetExecutingAssembly(), true)
+	.AddEnvironmentVariables()
     .SetBasePath(Directory.GetCurrentDirectory())
     .Build();
 
@@ -17,6 +20,8 @@ var logger = new LoggerConfiguration()
 Log.Logger = logger;
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddSwaggerGen(c => {
 	c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dog Microservice", Version = "v1" });
@@ -64,7 +69,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-builder.Host.ConfigureContainer<ContainerBuilder>(options => { options.RegisterModule(new AutofacModule(builder.Services, environment)); });
+builder.Host.ConfigureContainer<ContainerBuilder>(options => { options.RegisterModule(new AutofacModule(builder.Services, environment, configuration)); });
 builder.Host.UseSerilog(logger);
 
 var app = builder.Build();
@@ -72,10 +77,17 @@ var app = builder.Build();
 // Create & Seed Database
 var context = app.Services.GetRequiredService<IdentityContext>();
 var helperLogger = app.Services.GetService<ILogger<DatabaseHelper>>();
-var dbHelper = new DatabaseHelper(context, helperLogger);
+var passwordHasher = app.Services.GetService<IPasswordHasher>();
+var dbHelper = new DatabaseHelper(context, helperLogger, passwordHasher);
 
 dbHelper.CreateDatabase();
 dbHelper.SeedData();
+
+if (builder.Environment.IsDevelopment()) 
+{
+	app.UseDeveloperExceptionPage();
+	app.UseHsts();
+}
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>

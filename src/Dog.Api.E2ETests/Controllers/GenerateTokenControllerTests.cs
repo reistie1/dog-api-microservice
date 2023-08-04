@@ -1,24 +1,28 @@
-﻿namespace Dog.Api.IntegrationTests.Controllers;
+﻿namespace Dog.Api.E2ETests.Controllers;
 
-public class GenerateTokenControllerTests : BaseTest, IClassFixture<SharedFixture>
+
+[CollectionDefinition("Non-Parallel Collection", DisableParallelization = true)]
+public class NonParallelCollectionDefinitionClass
 {
-    public GenerateTokenControllerTests ( SharedFixture fixture ) : base(fixture.TestServerFixture) { }
+}
 
-    [Fact]
-    public async Task GenerateToken_ShouldPassWithValidCredentials ()
-    {
-        var request = await Client.PostAsJsonAsync("/GenerateToken", new TokenRequest { Email = Constants.AdminUser.Email, Password = Constants.AdminUser.Password });
+[Collection("Non-Parallel Collection")]
+public class GenerateTokenControllerFailureTest : BaseTest, IClassFixture<SharedFixture>
+{
+	public GenerateTokenControllerFailureTest(SharedFixture fixture) : base(fixture.TestServerFixture) { }
 
-        request.Should().NotBeNull();
-    }
+	[Fact]
+	public async Task GenerateToken_ShouldFailWithInvalidCredentials()
+	{
+		await Client.Invoking(x => x.PostAsJsonAsync("/GenerateToken", new GenerateToken.TokenRequest { Email = string.Empty, Password = string.Empty })).Should().ThrowAsync<ErrorResult>();
+	}
 
-    //[Fact]
-    //public async Task GenerateToken_ShouldFailWithInvalidCredentials ()
-    //{
-    //    var request = await Client.PostAsJsonAsync("/GenerateToken", new TokenRequest { Email = string.Empty, Password = string.Empty });
-    //    var response = await request.Content.ReadAsStringAsync();
+	[Fact]
+	public async Task GenerateToken_ShouldPassWithValidCredentials()
+	{
+		var request = await Client.PostAsJsonAsync("/GenerateToken", new GenerateToken.TokenRequest { Email = Constants.AdminUser.Email, Password = Constants.AdminUser.Password });
 
-    //    response.Should().Be(Constants.ErrorMessages.InvalidCredentials);
-    //}
+		request.Should().NotBeNull();
+	}
 }
 

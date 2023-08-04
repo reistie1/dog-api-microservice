@@ -1,7 +1,7 @@
 # Project Information
 This is the main API entry point. The project configures the following services
 	- mediaitR & pipeline behaviours, 
-	- autofac for all the application services used, 
+	- autofac for most of the application services used, 
 	- admin authorization
 	- authentication
 	- options for split feature flags and jwt tokens

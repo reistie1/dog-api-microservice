@@ -1,22 +1,19 @@
 ﻿namespace Dog.Api.IntegrationTests.Services;
 
-public class FeatureFlagServiceTests 
+public class FeatureFlagServiceTests : IClassFixture<SharedFixture>
 {
-    public FeatureFlagServiceTests() 
-    {   
+	private readonly SharedFixture _sharedFixture;
+
+	public FeatureFlagServiceTests(SharedFixture sharedFixture) 
+    {
+		_sharedFixture = sharedFixture;
+		sharedFixture.OptionsFixture.CreateSplitOptions();
     }
 
     [Fact]
     public async Task FeatureFlagService_ShouldPass() 
     {
-		var splitOptions = new SplitOptions {
-			ApiKey = TestConstants.Split.ApiKey,
-			TreatmentName = TestConstants.Split.TreatmentName,
-			UserId = TestConstants.Split.UserId,
-			WaitTime = TestConstants.Split.WaitTime,
-		};
-		var options = Options.Create(splitOptions);
-
+		var options = _sharedFixture.OptionsFixture.splitOptions;
 		var service = new FeatureFlagController.FeatureFlagService(options);
         var response = await service.CheckFeatureFlag();
 
@@ -26,14 +23,8 @@ public class FeatureFlagServiceTests
 	[Fact]
 	public async Task FeatureFlagService_ShouldFail()
 	{
-		var splitOptions = new SplitOptions {
-			ApiKey = TestConstants.Split.ApiKey,
-			TreatmentName = string.Empty,
-			UserId = TestConstants.Split.UserId,
-			WaitTime = TestConstants.Split.WaitTime,
-		};
+		var splitOptions = (SplitOptions)_sharedFixture.ModelFakerFixture.SplitOptions;
 		var options = Options.Create(splitOptions);
-
 		var service = new FeatureFlagController.FeatureFlagService(options);
 		var response = await service.CheckFeatureFlag();
 

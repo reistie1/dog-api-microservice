@@ -1,7 +1,4 @@
-﻿using Bogus;
-using Dog.Api.Core.Models;
-
-namespace Dog.Api.TestFramework.RuleCollections;
+﻿namespace Dog.Api.TestFramework.RuleCollections;
 
 public static class RoleRuleCollection
 {

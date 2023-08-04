@@ -1,0 +1,56 @@
+name: Dog Api
+
+on:
+  push:
+    branches: [ 'main', '*/*' ]
+  pull_requests:
+    branches: [ 'main', '*/*' ]
+
+jobs:
+  build:
+    runs-on: 'ubuntu-latest'
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "7.0.x"
+
+      - name: Restore
+        run: dotnet restore src/**/*.csproj
+
+      - name: Build
+        run: dotnet build src/**/Dog.Api.csproj --no-restore --no-build -c Release
+
+      - name: Unit Tests
+        run: dotnet test src/**/Dog.Api.UnitTests.csproj -c Release --no-build
+
+      - name: Intergration Tests
+        run: dotnet test src/**/Dog.Api.IntegrationTests.csproj -c Release --no-build
+
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage/**/coverage.cobertura.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
+          thresholds: '60 75'
+      
+      - name: Docker Login
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+      
+      - name: Build Docker Image
+        run: docker build src/Dog.Api --file Dockerfile --tag reistie1/dog-api-microservice:${{github.run_number}}
+      
+      - name: Docker Push
+        run: docker push ${{secrets.DOCKER_USER}}/docker_repo_name

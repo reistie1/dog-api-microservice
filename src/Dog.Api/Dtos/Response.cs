@@ -2,6 +2,9 @@
 
 public class Response<T>
 {
-    public T message { get; set; } = default!;
-    public string status { get; set; } = default!;
+
+	[JsonPropertyName("message")]
+    public T Message { get; set; } = default!;
+	[JsonPropertyName("status")]
+    public string Status { get; set; } = default!;
 }

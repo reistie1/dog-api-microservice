@@ -19,7 +19,13 @@ public partial class GenerateToken : BaseController
         return Ok(await _identityService.GenerateAuthToken(tokenRequest.Email, tokenRequest.Password));
     }
 
-    public partial interface IIdentityService
+	public class TokenRequest
+	{
+		public string Email { get; set; }
+		public string Password { get; set; }
+	}
+
+	public partial interface IIdentityService
     {
         public Task<string> GenerateAuthToken(string email, string password);
     }
@@ -28,13 +34,15 @@ public partial class GenerateToken : BaseController
     {
         private readonly IOptions<JwtOptions> _jwtOptions;
         private readonly ILogger<IdentityService> _logger;
-        private readonly UserManager<User> _userManager;
+		private readonly IPasswordHasher _passwordHasher;
+		private readonly UserManager<User> _userManager;
 
-        public IdentityService(IOptions<JwtOptions> jwtOptions, ILogger<IdentityService> logger, UserManager<User> userManager)
+		public IdentityService(IOptions<JwtOptions> jwtOptions, ILogger<IdentityService> logger, IPasswordHasher passwordHasher, UserManager<User> userManager)
         {
             _jwtOptions = jwtOptions ?? throw new ArgumentNullException(nameof(jwtOptions));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+			_passwordHasher = passwordHasher ?? throw new ArgumentNullException(nameof(passwordHasher));
+			_userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
         public async Task<string> GenerateAuthToken(string email, string password)
@@ -42,8 +50,9 @@ public partial class GenerateToken : BaseController
             try
             {
                 var user = await _userManager.FindByEmailAsync(email);
+				var passwordCheck = _passwordHasher.VerifyPassword(user, password);
 
-                if (user != null && await _userManager.CheckPasswordAsync(user, password))
+				if (user != null && passwordCheck)
                 {
                     var userRoles = await _userManager.GetRolesAsync(user);
                     var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SigningKey));

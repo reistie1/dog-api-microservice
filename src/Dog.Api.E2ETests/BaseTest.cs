@@ -1,4 +1,4 @@
-﻿namespace Dog.Api.IntegrationTests;
+﻿namespace Dog.Api.E2ETests;
 
 public abstract class BaseTest : IDisposable, IAsyncLifetime
 {

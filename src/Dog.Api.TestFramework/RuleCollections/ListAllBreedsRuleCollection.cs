@@ -1,7 +1,4 @@
-﻿using Bogus;
-using Dog.Api.Application;
-
-namespace Dog.Api.TestFramework.RuleCollections;
+﻿namespace Dog.Api.TestFramework.RuleCollections;
 public static class ListAllBreedsRuleCollection 
 {
     public static Faker<TCommand> ApplyListAllBreedRules<TCommand>(this Faker<TCommand> faker) where TCommand : ListAllDogBreedsCommand

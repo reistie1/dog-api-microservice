@@ -2,8 +2,11 @@
 
 public class RoleRequirementHandler : AuthorizationHandler<AdminRequirement>
 {
-    public RoleRequirementHandler()
+	private readonly IOptions<JwtOptions> _jwtOptions;
+
+	public RoleRequirementHandler(IOptions<JwtOptions> jwtOptions)
     {
+		_jwtOptions = jwtOptions;
     }
 
     protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, AdminRequirement requirement)
@@ -11,9 +14,10 @@ public class RoleRequirementHandler : AuthorizationHandler<AdminRequirement>
         if (context.User != null)
         {
 			var claims = context.User.Claims;
+			var issuer = context.User.Claims.First(c => c.Type == JwtRegisteredClaimNames.Iss).Value;
 			var roleClaims = claims.Where(x => x.Type == ClaimTypes.Role);
 
-            if (roleClaims.Any(x => string.Equals(x.Value, "Admin", StringComparison.OrdinalIgnoreCase)))
+			if (roleClaims.Any(x => string.Equals(x.Value, "Admin", StringComparison.OrdinalIgnoreCase)) && string.Equals(issuer, _jwtOptions.Value.Issuer, StringComparison.OrdinalIgnoreCase))
             {
                 context.Succeed(requirement);
             }

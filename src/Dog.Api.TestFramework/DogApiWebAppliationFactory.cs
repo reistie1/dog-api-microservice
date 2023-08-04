@@ -1,15 +1,20 @@
 ﻿namespace Dog.Api.TestFramework;
 public class DogApiWebAppliationFactory : WebApplicationFactory<Program>
 {
-    protected override void ConfigureWebHost ( IWebHostBuilder builder )
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(options => {
-            options.AddDbContext<IdentityContext>(options => {
-                options.UseInMemoryDatabase("testDb");
-            });
-        });
+		builder.UseEnvironment("Test");
 
-        base.ConfigureWebHost(builder);
+		builder.ConfigureTestServices(services => {
+			
+			if (services.Any(x => x.ServiceType == typeof(DbContextOptions))) 
+			{
+				services.RemoveAll(typeof(DbContextOptions));
+			}
+
+			services.AddDbContext<IdentityContext>(options => options.UseSqlite("DataSource=:memory:"));
+		});
+
+		base.ConfigureWebHost(builder);
     }
 }
-

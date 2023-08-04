@@ -3,22 +3,17 @@
 public class AutofacModule : Module
 {
     private readonly IServiceCollection _services;
-    private readonly string _environment;
+	private readonly IConfigurationRoot _config;
 
-    public AutofacModule(IServiceCollection services, string environment)
+	public AutofacModule(IServiceCollection services, string environment, IConfigurationRoot config)
     {
-        _services = services;
-        _environment = environment;
-    }
+		_config = config;
+		_services = services;
+	}
 
-    protected override void Load(ContainerBuilder builder)
+	protected override void Load(ContainerBuilder builder)
     {
-        var configuration = new ConfigurationBuilder()
-            .AddJsonFile($"appsettings.{_environment}.json")
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .Build();
-
-        var identityOptions = new IdentityOptions();
+		var identityOptions = new IdentityOptions();
 
         identityOptions.Password.RequireDigit = true;
         identityOptions.Password.RequireLowercase = true;
@@ -28,7 +23,7 @@ public class AutofacModule : Module
         identityOptions.Password.RequiredUniqueChars = 1;
 
         // Lockout settings.
-        identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+        identityOptions.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
         identityOptions.Lockout.MaxFailedAccessAttempts = 5;
         identityOptions.Lockout.AllowedForNewUsers = true;
 
@@ -37,30 +32,10 @@ public class AutofacModule : Module
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
         identityOptions.User.RequireUniqueEmail = false;
 
-        var optionsBuilder = new DbContextOptionsBuilder<IdentityContext>();
-        optionsBuilder.UseSqlServer(configuration.GetConnectionString(configuration.GetConnectionString("DefaultConnection")));
+		// Configuration
+		builder.RegisterInstance<IConfiguration>(_config);
 
-        builder.RegisterControllers(Assembly.GetExecutingAssembly());
-
-        // Configuration
-        builder.RegisterInstance<IConfiguration>(configuration);
-
-        // IdentityContext
-        builder.Register(c =>
-        {
-            var optionsBuilder = new DbContextOptionsBuilder<IdentityContext>();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString(configuration.GetConnectionString("DefaultConnection")));
-            return optionsBuilder.Options;
-        })
-            .As<DbContextOptions>()
-            .As<DbContextOptions<IdentityContext>>()
-            .SingleInstance();
-
-        // Identity Configuration
-        builder.Register(x => new IdentityContext(optionsBuilder.Options, configuration))
-            .As<IdentityContext>()
-            .SingleInstance();
-        builder.RegisterType<UserManager<User>>()
+		builder.RegisterType<UserManager<User>>()
             .As<UserManager<User>>()
             .SingleInstance();
         builder.RegisterType<RoleManager<Role>>()
@@ -154,26 +129,31 @@ public class AutofacModule : Module
         builder.RegisterType<FeatureFlagController.FeatureFlagService>()
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
+		builder.RegisterType<PasswordHasher>()
+			.AsImplementedInterfaces()
+			.InstancePerLifetimeScope();
 
-        // Logging
-        builder.Register(( c, p ) =>
-        {
-            var loggerFactory = new LoggerFactory();
-            loggerFactory.AddSerilog();
+		// Logging
+		builder.Register((c, p) => {
+			var loggerFactory = new LoggerFactory();
+			loggerFactory.AddSerilog();
 
-            return loggerFactory;
-        })
-        .As<ILoggerFactory>()
-        .SingleInstance();
+			return loggerFactory;
+		})
+		.As<ILoggerFactory>()
+		.InstancePerLifetimeScope();
 
-        builder.RegisterGeneric(typeof(Logger<>))
-            .As(typeof(ILogger<>))
-            .SingleInstance();
+		builder.RegisterGeneric(typeof(Logger<>))
+			.As(typeof(ILogger<>))
+			.InstancePerLifetimeScope();
 
         // Options Configuration
-        builder.Register(c => Options.Create(configuration.GetSection("JwtOptions").Get<JwtOptions>())).As<IOptions<JwtOptions>>().SingleInstance();
-        builder.Register(c => Options.Create(configuration.GetSection("SplitIO").Get<SplitOptions>())).As<IOptions<SplitOptions>>().SingleInstance();
+        builder.Register(c => Options.Create(_config.GetSection("JwtOptions").Get<JwtOptions>())).As<IOptions<JwtOptions>>().SingleInstance();
+        builder.Register(c => Options.Create(_config.GetSection("SplitIO").Get<SplitOptions>())).As<IOptions<SplitOptions>>().SingleInstance();
 
+		// Validators
+		builder.RegisterType<ListAllDogBreedsCommandValidator>().As<IValidator<ListAllDogBreedsCommand>>().InstancePerDependency();
+		builder.RegisterType<RandomBreedImageByBreedCommandValidator>().As<IValidator<RandomBreedImageByBreedCommand>>().InstancePerDependency().SingleInstance();
 
         // JsonSerializer Options
         new JsonSerializerOptions()

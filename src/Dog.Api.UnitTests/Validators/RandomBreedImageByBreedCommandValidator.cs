@@ -12,7 +12,8 @@ public class RandomBreedImageByBreedCommandValidators
     }
 
     [Fact]
-    public async void RandomBreedImageByBreedValidator_ShouldFailWithInvalidPageNumber() {
+    public async void RandomBreedImageByBreedValidator_ShouldFailWithInvalidPageNumber() 
+	{
         var model = _sharedFixture.ModelFaker.RandomBreedImageByBreed.Generate();
         model.PageNumber = -1;
         var result = await _validator.ValidateAsync(model);
@@ -21,16 +22,18 @@ public class RandomBreedImageByBreedCommandValidators
     }
 
     [Fact]
-    public async void RandomBreedImageByBreedValidator_ShouldFailWithEmptyPageNumber() {
+    public async void RandomBreedImageByBreedValidator_ShouldFailWithEmptyPageNumber() 
+	{
         var model = _sharedFixture.ModelFaker.RandomBreedImageByBreed.Generate();
-    model.PageNumber = default!;
+		model.PageNumber = default!;
         var result = await _validator.ValidateAsync(model);
 
         result.Errors.Should().Contain(x => x.ErrorMessage == Constants.ErrorMessages.EmptyPageNumber);
     }
 
     [Fact]
-    public async void RandomBreedImageByBreedValidator_ShouldFailWithInvalidPageSize() {
+    public async void RandomBreedImageByBreedValidator_ShouldFailWithInvalidPageSize() 
+	{
         var model = _sharedFixture.ModelFaker.RandomBreedImageByBreed.Generate();
         model.PageSize = -1;
         var result = await _validator.ValidateAsync(model);
@@ -39,7 +42,8 @@ public class RandomBreedImageByBreedCommandValidators
     }
 
     [Fact]
-    public async void RandomBreedImageByBreedValidator_ShouldFailWithEmptyPageSize() {
+    public async void RandomBreedImageByBreedValidator_ShouldFailWithEmptyPageSize() 
+	{
         var model = _sharedFixture.ModelFaker.RandomBreedImageByBreed.Generate();
         model.PageSize = default!;
         var result = await _validator.ValidateAsync(model);
@@ -48,7 +52,8 @@ public class RandomBreedImageByBreedCommandValidators
     }
 
     [Fact]
-    public async void RandomBreedImageByBreedValidator_ShouldFailWithInvalidBreed() {
+    public async void RandomBreedImageByBreedValidator_ShouldFailWithInvalidBreed() 
+	{
         var model = _sharedFixture.ModelFaker.RandomBreedImageByBreed.Generate();
         model.Breed = "bound1";
         var result = await _validator.ValidateAsync(model);

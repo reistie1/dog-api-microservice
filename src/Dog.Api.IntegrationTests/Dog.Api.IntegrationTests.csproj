@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Bogus" Version="34.0.2" />
     <PackageReference Include="FluentAssertions" Version="6.11.0" />
-	<PackageReference Include="Autofac.Mvc5" Version="6.1.0" />
 	<PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.8" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.3" />
     <PackageReference Include="xunit" Version="2.5.0" />

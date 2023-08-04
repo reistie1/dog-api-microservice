@@ -29,7 +29,7 @@ public class ListAllDogBreedsCommandValidators
         var result = await _validator.ValidateAsync(model);
 
         result.Errors.Should().Contain(x => x.ErrorMessage == Constants.ErrorMessages.EmptyPageNumber);
-    }
+	}
 
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithInvalidPageSize()
@@ -39,7 +39,7 @@ public class ListAllDogBreedsCommandValidators
         var result = await _validator.ValidateAsync(model);
 
         result.Errors.Should().Contain(x => x.ErrorMessage == Constants.ErrorMessages.PageSizeTooSmall);
-    }
+	}
 
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithEmptyPageSize() 
@@ -49,7 +49,7 @@ public class ListAllDogBreedsCommandValidators
         var result = await _validator.ValidateAsync(model);
 
         result.Errors.Should().Contain(x => x.ErrorMessage == Constants.ErrorMessages.EmptyPageSize);
-    }
+	}
 
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithInvalidSearch() 
@@ -59,5 +59,5 @@ public class ListAllDogBreedsCommandValidators
         var result = await _validator.ValidateAsync(model);
 
         result.Errors.Should().Contain(x => x.ErrorMessage == Constants.ErrorMessages.InvalidSearchFormat);
-    }
+	}
 }

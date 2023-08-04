@@ -39,16 +39,16 @@ public class ListAllDogBreedsCommandValidator : AbstractValidator<ListAllDogBree
     public ListAllDogBreedsCommandValidator()
     {
         RuleFor(x => x.PageNumber)
-            .GreaterThanOrEqualTo(0).WithMessage(Constants.ErrorMessages.PageNumberTooSmall)
+            .GreaterThanOrEqualTo(1).WithMessage(Constants.ErrorMessages.PageNumberTooSmall)
             .NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPageNumber);
 
         RuleFor(x => x.PageSize)
-            .GreaterThanOrEqualTo(0).WithMessage(Constants.ErrorMessages.PageSizeTooSmall)
+            .GreaterThanOrEqualTo(1).WithMessage(Constants.ErrorMessages.PageSizeTooSmall)
             .LessThanOrEqualTo(20).WithMessage(Constants.ErrorMessages.PageSizeTooLarge)
             .NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPageSize);
 
         RuleFor(x => x.Search)
-            .Matches(new Regex("^[a-zA-Z]+$")).WithMessage(Constants.ErrorMessages.InvalidSearchFormat)
+            .Matches(new Regex(Constants.Validators.SearchRegex)).WithMessage(Constants.ErrorMessages.InvalidSearchFormat)
             .When(x => x.Search != null);
     }
 }
@@ -85,7 +85,7 @@ public class ListAllBreedsService : IListAllBreedsService
 
         if (result != null)
         {
-            foreach (var breed in result.message)
+            foreach (var breed in result.Message)
             {
                 breedList.Add(new Breeds { Name = breed.Key, SubBreeds = breed.Value });
             }

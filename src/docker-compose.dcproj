@@ -9,6 +9,7 @@
     <DockerServiceName>dog.api</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="variables.env" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>

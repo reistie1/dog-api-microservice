@@ -1,7 +1,5 @@
-﻿using Bogus;
-using Dog.Api.Application;
+﻿namespace Dog.Api.TestFramework.RuleCollections;
 
-namespace Dog.Api.TestFramework.RuleCollections;
 public static class RandomBreedImageByBreedRuleCollection 
 {
     public static Faker<TCommand> ApplyRandomBreedImageByBreedRuleCollection<TCommand>(this Faker<TCommand> faker) where TCommand : RandomBreedImageByBreedCommand 

@@ -6,12 +6,16 @@ services:
     container_name: app
     environment:
         ASPNETCORE_ENVIRONMENT: "Docker"
+    env_file:
+        - variables.env
     ports:
         - 5000:5000
-    user: default
     build:
       context: .
       dockerfile: Dog.Api/Dockerfile
+      args:
+        USER: DogApi
+        GROUP: DogApiGroup
     depends_on:
         - mssql
   seq:
@@ -20,8 +24,7 @@ services:
     environment:
        ACCEPT_EULA: Y
     ports: 
-        - 80:80
-        - 5341:5341
+        - 5341:80
   mssql:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: dB

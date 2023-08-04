@@ -1,6 +1,6 @@
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine3.17 AS base
-ARG USER=default
-ARG GROUP=docker
+ARG USER
+ARG GROUP
 ENV HOME /home/$USER
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 
@@ -8,9 +8,8 @@ RUN apk add --update sudo
 RUN apk add --no-cache icu-libs
 
 # add new user
-RUN addgroup -S $GROUP && adduser -S $USER -G $GROUP \
-    && echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER \
-    && chmod 0440 /etc/sudoers.d/$USER
+RUN addgroup -S $GROUP
+RUN adduser -S $USER -G $GROUP
 
 USER $USER
 

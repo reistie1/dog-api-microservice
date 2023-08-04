@@ -24,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{BC3F1BD4-B1B2-4AFB-AE2D-DE141BE67854}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dog.Api.E2ETests", "Dog.Api.E2ETests\Dog.Api.E2ETests.csproj", "{1ABB2F51-F080-4834-8D75-2B0DF3CE90CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dog.Api.E2ETests", "Dog.Api.E2ETests\Dog.Api.E2ETests.csproj", "{1ABB2F51-F080-4834-8D75-2B0DF3CE90CC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

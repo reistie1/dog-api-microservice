@@ -2,16 +2,18 @@
 
 public class RandomBreedImageByBreedServiceTests : BaseTest, IClassFixture<SharedFixture> 
 {
+	private readonly SharedFixture _sharedFixture;
 
-    public RandomBreedImageByBreedServiceTests(SharedFixture sharedFixture) : base(sharedFixture.DogApiFixture)
+	public RandomBreedImageByBreedServiceTests(SharedFixture sharedFixture) : base(sharedFixture.DogApiFixture)
     {
+		_sharedFixture = sharedFixture;
     }
 
     [Fact]
     public async Task RandomBreedImageByBreedService_ShouldPass() 
     {
         var model = new ModelFakerFixture().RandomBreedImageByBreed.Generate();
-        var service = new RandomBreedImageByBreedService(Client);
+        var service = new RandomBreedImageByBreedService(_sharedFixture.DogApiFixture.CreateClient());
         var result = await service.RandomBreedImageByBreed(model);
 
         result.Count.Should().BeGreaterThanOrEqualTo(0);
@@ -23,7 +25,7 @@ public class RandomBreedImageByBreedServiceTests : BaseTest, IClassFixture<Share
 	{
 		var model = new ModelFakerFixture().RandomBreedImageByBreed.Generate();
 		model.Breed = "Beagle";
-		var service = new RandomBreedImageByBreedService(Client);
+		var service = new RandomBreedImageByBreedService(_sharedFixture.DogApiFixture.CreateClient());
 
 		await service.Invoking(x => x.RandomBreedImageByBreed(model)).Should().ThrowAsync<HttpRequestException>();
 	}

@@ -1,6 +1,6 @@
 ﻿namespace Dog.Api.UnitTests.Mocks;
 
-public static class UserManagerMock 
+public static class UserManagerMock
 {
     public static Mock<UserManager<TUser>> MockUserManager<TUser>() where TUser : User 
     {
