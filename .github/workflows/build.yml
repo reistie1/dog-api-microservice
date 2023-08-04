@@ -17,6 +17,9 @@ jobs:
         with:
           dotnet-version: "7.0.x"
 
+      - name: Set Permission
+        run: git update-index --chmod=+x ./.github/scripts/backend_decrypt.sh
+
       - name: Restore
         run: dotnet restore src/DogApiMicroservice.sln
 
