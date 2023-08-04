@@ -1,6 +1,8 @@
 ﻿namespace Dog.Api.E2ETests.Controllers;
 
-public class FeatureFlagControllerTests:BaseTest, IClassFixture<SharedFixture>
+[CollectionDefinition("FeatureFlagCollection", DisableParallelization = true)]
+[Collection("FeatureFlagCollection")]
+public class FeatureFlagControllerTests : BaseTest, IClassFixture<SharedFixture>
 {
 	public FeatureFlagControllerTests(SharedFixture sharedFixture) : base(sharedFixture.TestServerFixture)
 	{

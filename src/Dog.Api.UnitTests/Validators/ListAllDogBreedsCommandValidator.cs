@@ -14,7 +14,7 @@ public class ListAllDogBreedsCommandValidators
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithInvalidPageNumber() 
     {
-        var model = _sharedFixture.ModelFaker.ListBreedsCommand.Generate();
+        var model = _sharedFixture.ModelFakerFixture.ListBreedsCommand.Generate();
         model.PageNumber = -1;
         var result = await _validator.ValidateAsync(model);
 
@@ -24,7 +24,7 @@ public class ListAllDogBreedsCommandValidators
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithEmptyPageNumber() 
     {
-        var model = _sharedFixture.ModelFaker.ListBreedsCommand.Generate();
+        var model = _sharedFixture.ModelFakerFixture.ListBreedsCommand.Generate();
         model.PageNumber = default!;
         var result = await _validator.ValidateAsync(model);
 
@@ -34,7 +34,7 @@ public class ListAllDogBreedsCommandValidators
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithInvalidPageSize()
     {
-        var model = _sharedFixture.ModelFaker.ListBreedsCommand.Generate();
+        var model = _sharedFixture.ModelFakerFixture.ListBreedsCommand.Generate();
         model.PageSize = -1;
         var result = await _validator.ValidateAsync(model);
 
@@ -44,7 +44,7 @@ public class ListAllDogBreedsCommandValidators
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithEmptyPageSize() 
     {
-        var model = _sharedFixture.ModelFaker.ListBreedsCommand.Generate();
+        var model = _sharedFixture.ModelFakerFixture.ListBreedsCommand.Generate();
         model.PageSize = default!;
         var result = await _validator.ValidateAsync(model);
 
@@ -54,7 +54,7 @@ public class ListAllDogBreedsCommandValidators
     [Fact]
     public async void ListAllDogBreedsValidator_ShouldFailWithInvalidSearch() 
     {
-        var model = _sharedFixture.ModelFaker.ListBreedsCommand.Generate();
+        var model = _sharedFixture.ModelFakerFixture.ListBreedsCommand.Generate();
         model.Search = "bound1";
         var result = await _validator.ValidateAsync(model);
 

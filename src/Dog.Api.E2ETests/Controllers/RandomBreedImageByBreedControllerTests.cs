@@ -1,5 +1,7 @@
 ﻿namespace Dog.Api.E2ETests.Controllers;
 
+[CollectionDefinition("RandomBreedImageByBreedCollection", DisableParallelization = true)]
+[Collection("RandomBreedImageByBreedCollection")]
 public class RandomBreedImageByBreedControllerTests:BaseTest, IClassFixture<SharedFixture>
 {
 	public RandomBreedImageByBreedControllerTests(SharedFixture sharedFixture) : base(sharedFixture.TestServerFixture)

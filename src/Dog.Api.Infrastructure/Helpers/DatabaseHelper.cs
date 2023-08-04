@@ -17,6 +17,10 @@ public class DatabaseHelper
     {
         try
         {
+			if (_identityContext.Database.IsInMemory()) {
+				_identityContext.Database.EnsureDeleted();
+			}
+			
             _identityContext.Database.EnsureCreated();
             _logger.LogInformation("Database successfully created");
         }

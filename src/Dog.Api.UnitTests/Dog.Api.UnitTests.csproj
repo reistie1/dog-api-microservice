@@ -26,12 +26,12 @@
 
 	<ItemGroup>
 		<ProjectReference Include="../Dog.Api/Dog.Api.csproj" />
-		<ProjectReference Include="../Dog.Api.TestFramework/Dog.Api.TestFramework.csproj" />
 		<ProjectReference Include="../Dog.Api.Core/Dog.Api.Core.csproj" />
+		<ProjectReference Include="../Dog.Api.TestFramework/Dog.Api.TestFramework.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
+	<!--<ItemGroup>
 	  <Folder Include="Mocks\" />
-	</ItemGroup>
+	</ItemGroup>-->
 
 </Project>

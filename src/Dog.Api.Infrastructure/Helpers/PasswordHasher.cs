@@ -30,7 +30,6 @@ public class PasswordHasher : IPasswordHasher
 			}
 		}
 		
-
 		return false;
 	}
 }

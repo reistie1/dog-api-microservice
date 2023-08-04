@@ -17,43 +17,62 @@ jobs:
         with:
           dotnet-version: "7.0.x"
 
-      - name: Set Permission
-        run: git update-index --chmod=+x ./.github/scripts/backend_decrypt.sh
+      - name: Create Build Number
+        run: |
+          echo "BUILD_NUMBER=${{github.run_number}}-${{github.run_id}}-${{github.run_attempt}}"
 
       - name: Restore
         run: dotnet restore src/DogApiMicroservice.sln
 
       - name: Build
-        run: dotnet build src/**/Dog.Api.csproj --no-restore --no-build -c Release
+        run: dotnet build src/DogApiMicroservice.sln --no-restore -c Release
 
       - name: Unit Tests
-        run: dotnet test src/**/Dog.Api.UnitTests.csproj -c Release --no-build
+        run: dotnet test src/Dog.Api.UnitTests/Dog.Api.UnitTests.csproj --no-restore -c Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverage
 
-      - name: Intergration Tests
-        run: dotnet test src/**/Dog.Api.IntegrationTests.csproj -c Release --no-build
+      - name: Integration Tests
+        run: dotnet test src/Dog.Api.IntegrationTests/Dog.Api.IntegrationTests.csproj --no-restore -c Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverages
+        env:
+          SplitIO__UserId: ${{secrets.SPLITIO__USERID}}
+          SplitIO__ApiKey: ${{secrets.SPLITIO_APIKEY}}
+          SplitIO__TreatmentName: ${{secrets.SPLITIO_TREATMENTNAME}}
+          SplitIO__WaitTime: ${{secrets.SPLITIO_WAITTIME}}
+     
+      - name: Copy Code Coverage Results
+        run: cp coverage/**/coverage.cobertura.xml coverage.cobertura.xml
 
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage/**/coverage.cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 75'
+      - name: Copy Code Coverage Results
+        run: cp coverages/**/coverage.cobertura.xml coverage.cobertura.xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/**/coverage.cobertura.xml coverage.cobertura.xml, coverages/**/coverage.cobertura.xml coverage.cobertura.xml
+          flags: unit tests, integration tests
+          name: codecov-dog-api
+          fail_ci_if_error: true
+          verbose: true
+          
+      - name: Publish Artifact
+        uses: actions/upload-artifact@v2
+        with: 
+          name: dog-api
+          path: src
       
       - name: Docker Login
-        env:
-          DOCKER_USER: ${{secrets.DOCKER_USER}}
-          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-      
+        uses: docker/login-action@v1
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
       - name: Build Docker Image
-        run: docker build src/Dog.Api --file Dockerfile --tag reistie1/dog-api-microservice:${{github.run_number}}
-      
-      - name: Docker Push
-        run: docker push ${{secrets.DOCKER_USER}}/docker_repo_name
+        uses: docker/build-push-action@v4
+        with:
+          context: src
+          file: ./src/Dog.Api/Dockerfile
+          push: true
+          tags: ${{secrets.DOCKER_USERNAME}}/dog-api-microservice:${{github.run_number}}-${{github.run_id}}-${{github.run_attempt}}

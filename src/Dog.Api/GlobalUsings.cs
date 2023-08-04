@@ -26,7 +26,6 @@ global using Splitio.Services.Client.Classes;
 global using Dog.Api.Application;
 global using Dog.Api.Auth;
 global using Dog.Api.Behaviours;
-global using Dog.Api.Configuration;
 global using Dog.Api.Core;
 global using Dog.Api.Core.Errors;
 global using Dog.Api.Core.Options;

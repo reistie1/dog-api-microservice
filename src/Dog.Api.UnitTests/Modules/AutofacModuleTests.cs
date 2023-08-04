@@ -23,13 +23,14 @@ public class AutofacModuleTests
 
 	[Fact]
 	public void RegisterOptions_ShouldPass()
-		{
+	{
 		var jwtOptions = _scope.Resolve<IOptions<JwtOptions>>();
 		var splitOptions = _scope.Resolve<IOptions<SplitOptions>>();
+		var logger = _scope.Resolve<ILoggerFactory>();
 
 		jwtOptions.Should().NotBeNull();
 		splitOptions.Should().NotBeNull();
-		}
-
+		logger.Should().NotBeNull();
 	}
+}
 

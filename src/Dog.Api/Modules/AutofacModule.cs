@@ -159,7 +159,8 @@ public class AutofacModule : Module
         new JsonSerializerOptions()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-            NumberHandling = JsonNumberHandling.Strict,
+			PropertyNameCaseInsensitive = true,
+			NumberHandling = JsonNumberHandling.Strict,
         };
 
         base.Load(builder);

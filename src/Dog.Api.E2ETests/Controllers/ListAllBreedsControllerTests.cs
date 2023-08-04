@@ -1,7 +1,9 @@
 ﻿namespace Dog.Api.E2ETests.Controllers;
 
-public class ListAllBreedsControllerTests:BaseTest, IClassFixture<SharedFixture>
-{
+[CollectionDefinition("ListAllBreedsCollection", DisableParallelization = true)]
+[Collection("ListAllBreedsCollection")]
+public class ListAllBreedsControllerTests : BaseTest, IClassFixture<SharedFixture>
+	{
 	public ListAllBreedsControllerTests(SharedFixture sharedFixture) : base(sharedFixture.TestServerFixture)
 	{
 	}
@@ -33,6 +35,6 @@ public class ListAllBreedsControllerTests:BaseTest, IClassFixture<SharedFixture>
 		result.Should().NotBeNull();
 		result.Should().HaveCount(1);
 		result.Should().BeOfType<List<Breeds>>();
-		}
+	}
 }
 

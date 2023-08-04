@@ -16,7 +16,7 @@ public class ListAllBreedsServiceTests : BaseTest, IClassFixture<SharedFixture>
         var service = new ListAllBreedsService(_sharedFixture.DogApiFixture.CreateClient());
         var result = await service.ListAllBreeds(model);
 
-        result.First().SubBreeds.Should().NotBeEmpty();
+        result.Should().NotBeEmpty();
         result.First().SubBreeds.Should().HaveCount(7);
         result.First().Name.Should().Be("hound");
     }

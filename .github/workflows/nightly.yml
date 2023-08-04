@@ -1,16 +1,16 @@
 name: Dog Api
 
 on:
-  push:
-    branches: [ 'main' ]
-  pull_request:
-    branches: [ 'main' ]
   schedule:
     - cron: '0 22 * * *'
-
+  push:
+    branches: [ 'main', '*/*' ]
+  pull_request:
+    branches: [ 'main', '*/*' ]
+  
 jobs:
   build:
-    runs-on: 'ubuntu-latest'
+    runs-on: 'windows-latest'
     steps:
       - uses: actions/checkout@v3
 
@@ -18,28 +18,34 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: "7.0.x"
-
-      - name: Set Permission
-        run: git update-index --chmod=+x ./.github/scripts/backend_decrypt.sh
+      
+      - name: Create Build Number
+        run: |
+          echo "BUILD_NUMBER=${{github.run_number}}-${{github.run_id}}-${{github.run_attempt}}"
 
       - name: Restore
-        run: src/DogApiMicroservice.sln
+        run: dotnet restore src/DogApiMicroservice.sln
 
       - name: Build
-        run: dotnet build src/**/Dog.Api.csproj --no-restore --no-build -c Release
+        run: dotnet build src/DogApiMicroservice.sln --no-restore -c Release
 
       - name: End-to-End Tests
-        run: dotnet test src/**/Dog.Api.E2ETests.csproj -c Release --no-build
+        run: dotnet test src/Dog.Api.E2ETests/Dog.Api.E2ETests.csproj --no-build --no-restore -c Release --collect:"XPlat Code Coverage" --results-directory ./coverage
+        env:
+          SplitIO__UserId: ${{secrets.SPLITIO__USERID}}
+          SplitIO__ApiKey: ${{secrets.SPLITIO_APIKEY}}
+          SplitIO__TreatmentName: ${{secrets.SPLITIO_TREATMENTNAME}}
+          SplitIO__WaitTime: ${{secrets.SPLITIO_WAITTIME}}
 
-      - name: Code Coverage Report
-        uses: irongut/CodeCoverageSummary@v1.3.0
-        with:
-          filename: coverage/**/coverage.cobertura.xml
-          badge: true
-          fail_below_min: true
-          format: markdown
-          hide_branch_rate: false
-          hide_complexity: true
-          indicators: true
-          output: both
-          thresholds: '60 75'
+      - name: Copy Coverage To Predictable Location
+        run: cp coverage/**/coverage.cobertura.xml coverage.cobertura.xml
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v3
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.cobertura.xml
+          flags: e2etests
+          name: codecov-dog-api
+          fail_ci_if_error: true
+          verbose: true

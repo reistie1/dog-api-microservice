@@ -12,7 +12,7 @@ public class PasswordHasherTests : IClassFixture<SharedFixture>
 	[Fact]
 	public void HashPasword_ShouldPass()
 	{
-		var user = _sharedFixture.ModelFaker.User.Generate();
+		var user = _sharedFixture.ModelFakerFixture.User.Generate();
 		var result = _sharedFixture.PasswordHasher.HashPassword(user, "Password1!");
 
 		result.Should().NotBeNull();
@@ -28,7 +28,7 @@ public class PasswordHasherTests : IClassFixture<SharedFixture>
 	[Fact]
 	public void VerifyPasword_ShouldPass()
 	{
-		var user = _sharedFixture.ModelFaker.User.Generate();
+		var user = _sharedFixture.ModelFakerFixture.User.Generate();
 		var hashResult = _sharedFixture.PasswordHasher.HashPassword(user, "Password1!");
 		user.PasswordHash = hashResult;
 		var result = _sharedFixture.PasswordHasher.VerifyPassword(user, "Password1!");
@@ -39,9 +39,17 @@ public class PasswordHasherTests : IClassFixture<SharedFixture>
 	[Fact]
 	public void VerifyPasword_ShouldFail()
 	{
-		var user = _sharedFixture.ModelFaker.User.Generate();
+		var user = _sharedFixture.ModelFakerFixture.User.Generate();
 		var hashResult = _sharedFixture.PasswordHasher.HashPassword(user, "Password1!");
 		var result = _sharedFixture.PasswordHasher.VerifyPassword(user, "Password1!");
+
+		result.Should().BeFalse();
+	}
+
+	[Fact]
+	public void VerifyPasword_ShouldReturnFalseWithNullUser()
+	{
+		var result = _sharedFixture.PasswordHasher.VerifyPassword(null, "Password1!");
 
 		result.Should().BeFalse();
 	}

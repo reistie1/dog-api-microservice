@@ -1,5 +1,5 @@
-﻿namespace Dog.Api.Configuration
-{
+﻿namespace Dog.Api.Behaviours;
+
     public class ErrorBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
     {
         private readonly ILogger<ErrorBehaviour<TRequest, TResponse>> _logger;
@@ -19,16 +19,15 @@
             {
                 _logger.LogError(ex.Message, ex);
 
-				if (ex is HttpRequestException)
-				{
-					var httpException = ex as HttpRequestException;
-					throw new ErrorResult(httpException.Message, httpException.StatusCode.ToString());
-				}
-				else 
-				{
-					throw new ErrorResult($"Error encountered in pipeline, error: {0}", ex.Message);
-				}
-            }
+			if (ex is HttpRequestException)
+			{
+				var httpException = ex as HttpRequestException;
+				throw new ErrorResult(httpException.Message, httpException.StatusCode.ToString());
+			}
+			else 
+			{
+				throw new ErrorResult($"Error encountered in pipeline, error: {0}", ex.Message);
+			}
         }
     }
 }

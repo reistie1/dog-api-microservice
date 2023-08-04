@@ -1,12 +1,7 @@
 ﻿namespace Dog.Api.E2ETests.Controllers;
 
-
-[CollectionDefinition("Non-Parallel Collection", DisableParallelization = true)]
-public class NonParallelCollectionDefinitionClass
-{
-}
-
-[Collection("Non-Parallel Collection")]
+[CollectionDefinition("GenerateTokenCollection", DisableParallelization = true)]
+[Collection("GenerateTokenCollection")]
 public class GenerateTokenControllerFailureTest : BaseTest, IClassFixture<SharedFixture>
 {
 	public GenerateTokenControllerFailureTest(SharedFixture fixture) : base(fixture.TestServerFixture) { }
