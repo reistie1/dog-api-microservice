@@ -12,7 +12,7 @@ public class ValidationBehaviourTests :IClassFixture<SharedFixture>
 	}
 
 	[Fact]
-	public async void ValidationBehaviourTest_ShouldReturnErro()
+	public async void ValidationBehaviourTest_ShouldReturnError()
 	{
 		var model = _sharedFixture.ModelFakerFixture.ListBreedsCommand.Generate();
 		model.PageNumber = -1;
