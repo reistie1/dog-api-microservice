@@ -8,10 +8,10 @@ RUN apk add --update sudo bash
 RUN apk add --no-cache icu-libs
 
 # add new user
-# RUN addgroup -S $GROUP
-# RUN adduser -S $USER -G $GROUP
+RUN addgroup -S $GROUP
+RUN adduser -S $USER -G $GROUP
 
-# USER $USER
+USER $USER
 
 WORKDIR /app
 EXPOSE 5000
