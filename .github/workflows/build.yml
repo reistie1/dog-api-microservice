@@ -74,8 +74,8 @@ jobs:
         with:
           context: src
           build-args: |
-            USER: DogApi
-            GROUP: DogApiGroup
+            USER=DogApi
+            GROUP=DogApiGroup
           file: ./src/Dog.Api/Dockerfile
           push: true
           tags: ${{secrets.DOCKER_USERNAME}}/dog-api-microservice:${{github.run_number}}-${{github.run_id}}-${{github.run_attempt}}
