@@ -81,7 +81,7 @@ var passwordHasher = app.Services.GetService<IPasswordHasher>();
 var dbHelper = new DatabaseHelper(context, helperLogger, passwordHasher);
 
 dbHelper.CreateDatabase();
-dbHelper.SeedData();
+await dbHelper.SeedData();
 
 if (builder.Environment.IsDevelopment()) 
 {

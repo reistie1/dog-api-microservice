@@ -19,9 +19,10 @@ public class ListAllBreedsServiceTests : BaseTest, IClassFixture<SharedFixture>
         result.Should().NotBeEmpty();
         result.First().SubBreeds.Should().HaveCount(7);
         result.First().Name.Should().Be("hound");
-    }
+		result.Should().BeOfType<List<Breeds>>();
+	}
 
-    [Fact]
+	[Fact]
     public async Task ListAllBreedsService_ShouldFail()
     {
         var model = new ModelFakerFixture().ListBreedsCommand.Generate();
@@ -30,5 +31,6 @@ public class ListAllBreedsServiceTests : BaseTest, IClassFixture<SharedFixture>
         var result = await service.ListAllBreeds(model);
 
         result.Should().BeEmpty();
+		result.Should().BeOfType<List<Breeds>>();
     }
 }

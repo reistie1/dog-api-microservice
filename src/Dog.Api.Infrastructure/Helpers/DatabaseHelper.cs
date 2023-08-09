@@ -31,7 +31,7 @@ public class DatabaseHelper
         }
     }
 
-    public async void SeedData()
+    public async Task SeedData()
     {
         try
         {

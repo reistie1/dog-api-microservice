@@ -16,6 +16,7 @@ public class RandomBreedImageServiceTests : BaseTest, IClassFixture<SharedFixtur
         var result = await service.RandomBreedImage();
 
         result.Should().NotBeNull();
+		result.Should().BeOfType<Response<string>>();
     }
 }
 

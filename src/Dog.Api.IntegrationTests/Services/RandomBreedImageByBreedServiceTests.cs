@@ -18,6 +18,7 @@ public class RandomBreedImageByBreedServiceTests : BaseTest, IClassFixture<Share
 
         result.Count.Should().BeGreaterThanOrEqualTo(0);
         result.List.Should().NotBeEmpty();
+		result.Should().BeOfType<ListResponse<List<string>>>();
     }
 
 	[Fact]

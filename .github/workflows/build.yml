@@ -47,7 +47,7 @@ jobs:
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
         env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
           files: coverage/**/coverage.cobertura.xml coverage.cobertura.xml, coverages/**/coverage.cobertura.xml coverage.cobertura.xml
           flags: unit tests, integration tests
           name: codecov-dog-api
