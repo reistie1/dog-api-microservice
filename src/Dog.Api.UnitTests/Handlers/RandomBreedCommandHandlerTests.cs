@@ -21,5 +21,6 @@ public class RandomBreedCommandHandlerTests : IClassFixture<SharedFixture>
 
 		result.Should().NotBeNull();
 		result.Should().Be(_result);
+		result.Status.Should().BeNull();
 	}
 }
