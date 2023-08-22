@@ -25,4 +25,3 @@ public class ListAllBreedsCommandHandlerTests : IClassFixture<SharedFixture>
 		result.Should().BeOfType<List<Breeds>>();
 	}
 }
-

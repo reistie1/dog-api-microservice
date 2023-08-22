@@ -1,10 +1,12 @@
-﻿global using System.Security.Cryptography;
-global using Microsoft.AspNetCore.Identity;
-global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿global using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Logging;
-global using Microsoft.Extensions.Configuration;
+global using System.Security.Cryptography;
 global using Dog.Api.Core;
 global using Dog.Api.Core.Errors;
 global using Dog.Api.Core.Models;
 global using Dog.Api.Infrastructure.Contexts;
+global using AdminRole = Dog.Api.Core.Constants.AdminRole;
+global using AdminUser = Dog.Api.Core.Constants.AdminUser;
+global using BasicUser = Dog.Api.Core.Constants.User;
+global using UserRole = Dog.Api.Core.Constants.UserRole;

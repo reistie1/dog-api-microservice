@@ -2,8 +2,8 @@
 
 public class TestServerFixture : IDisposable
 {
-    private DogApiWebAppliationFactory _factory = default!;
-    private bool _disposedValue;
+	private bool _disposedValue;
+	private DogApiWebAppliationFactory _factory = default!;
 
     public HttpClient CreateApiClient()
     {

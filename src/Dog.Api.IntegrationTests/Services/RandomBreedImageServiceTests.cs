@@ -19,4 +19,3 @@ public class RandomBreedImageServiceTests : BaseTest, IClassFixture<SharedFixtur
 		result.Should().BeOfType<Response<string>>();
     }
 }
-

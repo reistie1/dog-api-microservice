@@ -9,15 +9,14 @@ public class GenerateTokenControllerFailureTest : BaseTest, IClassFixture<Shared
 	[Fact]
 	public async Task GenerateToken_ShouldFailWithInvalidCredentials()
 	{
-		await Client.Invoking(x => x.PostAsJsonAsync("/GenerateToken", new GenerateToken.TokenRequest { Email = string.Empty, Password = string.Empty })).Should().ThrowAsync<ErrorResult>();
+		await Client.Invoking(x => x.PostAsJsonAsync("/GenerateToken", new GenerateTokenController.TokenRequestCommand { Email = string.Empty, Password = string.Empty })).Should().ThrowAsync<ErrorResult>();
 	}
 
 	[Fact]
 	public async Task GenerateToken_ShouldPassWithValidCredentials()
 	{
-		var request = await Client.PostAsJsonAsync("/GenerateToken", new GenerateToken.TokenRequest { Email = Constants.AdminUser.Email, Password = Constants.AdminUser.Password });
+		var request = await Client.PostAsJsonAsync("/GenerateToken", new GenerateTokenController.TokenRequestCommand { Email = Constants.AdminUser.Email, Password = Constants.AdminUser.Password });
 
 		request.Should().NotBeNull();
 	}
 }
-

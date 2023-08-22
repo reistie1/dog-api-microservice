@@ -2,14 +2,14 @@
 
 public class ErrorBehaviourTests
 {
-	private readonly Mock<RequestHandlerDelegate<Response<string>>> _requestDelegateMock;
 	private readonly ILogger<ErrorBehaviour<RandomBreedCommand, Response<string>>> _logger;
+	private readonly Mock<RequestHandlerDelegate<Response<string>>> _requestDelegateMock;
 
 	public ErrorBehaviourTests()
 	{
+		_logger = new LoggerFactory().CreateLogger<ErrorBehaviour<RandomBreedCommand, Response<string>>>();
 		_requestDelegateMock = new Mock<RequestHandlerDelegate<Response<string>>>();
 		_requestDelegateMock.Setup(x => x()).ThrowsAsync(new Exception("BadRequest"));
-		_logger = new LoggerFactory().CreateLogger<ErrorBehaviour<RandomBreedCommand, Response<string>>>();
 	}
 
 	[Fact]
@@ -44,4 +44,3 @@ public class ErrorBehaviourTests
 		result.Should().NotBeNull();
 	}
 }
-

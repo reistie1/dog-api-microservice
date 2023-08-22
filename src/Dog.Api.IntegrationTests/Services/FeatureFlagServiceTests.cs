@@ -31,4 +31,3 @@ public class FeatureFlagServiceTests : IClassFixture<SharedFixture>
 		response.Should().Be(false);
 	}
 }
-

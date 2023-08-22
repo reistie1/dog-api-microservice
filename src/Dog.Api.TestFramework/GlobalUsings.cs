@@ -9,6 +9,7 @@ global using Microsoft.Extensions.Options;
 global using System.Reflection;
 global using Bogus;
 global using Dog.Api.Application;
+global using Dog.Api.Core;
 global using Dog.Api.Core.Models;
 global using Dog.Api.Core.Options;
 global using Dog.Api.Dtos;

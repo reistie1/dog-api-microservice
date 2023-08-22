@@ -35,7 +35,6 @@ public abstract class BaseTest : IDisposable, IAsyncLifetime
             return;
         }
 
-        //Client?.Dispose();
         Client = null;
     }
 }

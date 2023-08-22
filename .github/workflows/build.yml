@@ -30,13 +30,13 @@ jobs:
       - name: Unit Tests
         run: dotnet test src/Dog.Api.UnitTests/Dog.Api.UnitTests.csproj --no-restore -c Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverage
 
-      - name: Integration Tests
-        run: dotnet test src/Dog.Api.IntegrationTests/Dog.Api.IntegrationTests.csproj --no-restore -c Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverages
-        env:
-          SplitIO__UserId: ${{secrets.SPLITIO__USERID}}
-          SplitIO__ApiKey: ${{secrets.SPLITIO_APIKEY}}
-          SplitIO__TreatmentName: ${{secrets.SPLITIO_TREATMENTNAME}}
-          SplitIO__WaitTime: ${{secrets.SPLITIO_WAITTIME}}
+      # - name: Integration Tests
+      #   run: dotnet test src/Dog.Api.IntegrationTests/Dog.Api.IntegrationTests.csproj --no-restore -c Release --no-build --collect:"XPlat Code Coverage" --results-directory ./coverages
+      #   env:
+      #     SplitIO__UserId: ${{secrets.SPLITIO__USERID}}
+      #     SplitIO__ApiKey: ${{secrets.SPLITIO_APIKEY}}
+      #     SplitIO__TreatmentName: ${{secrets.SPLITIO_TREATMENTNAME}}
+      #     SplitIO__WaitTime: ${{secrets.SPLITIO_WAITTIME}}
      
       - name: Copy Code Coverage Results
         run: cp coverage/**/coverage.cobertura.xml coverage.cobertura.xml

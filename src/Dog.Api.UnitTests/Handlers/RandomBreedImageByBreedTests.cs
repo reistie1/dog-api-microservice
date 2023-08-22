@@ -3,8 +3,8 @@
 public class RandomBreedImageByBreedTests : IClassFixture<SharedFixture>
 {
 	private readonly RandomBreedImageByBreedCommand _model;
-	private readonly ListResponse<List<string>> _result;
 	private readonly Mock<IRandomBreedImageByBreedService> _randomBreedImageByBreedServiceMock;
+	private readonly ListResponse<List<string>> _result;
 
 	public RandomBreedImageByBreedTests(SharedFixture sharedFixture)
 	{

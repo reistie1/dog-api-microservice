@@ -2,8 +2,8 @@
 
 public class ErrorResult : Exception
 {
-    public string ErrorCode { get; set; }
-    public IEnumerable<string> ErrorMessage { get; set; }
+	public string ErrorCode { get; set; } = default!;
+    public IEnumerable<string> ErrorMessage { get; set; } = new List<string>();
 
     public ErrorResult() { }
 

@@ -2,35 +2,53 @@
 
 [ApiController]
 [Route("[controller]")]
-public partial class GenerateToken : BaseController
+public class GenerateTokenController : BaseController
 {
-    private readonly IIdentityService _identityService;
+	private readonly IMediator _mediator;
 
-    public GenerateToken(IIdentityService identityService)
+	public GenerateTokenController(IMediator mediator)
     {
-        _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     [AllowAnonymous]
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
-    public async Task<ActionResult> GenerateTokenAsync([FromBody] TokenRequest tokenRequest)
+    public async Task<ActionResult> GenerateTokenAsync([FromBody] TokenRequestCommand tokenRequest)
     {
-        return Ok(await _identityService.GenerateAuthToken(tokenRequest.Email, tokenRequest.Password));
+        return Ok(await _mediator.Send(tokenRequest));
     }
 
-	public class TokenRequest
+	public class TokenRequestCommandValidator : AbstractValidator<TokenRequestCommand>
 	{
-		public string Email { get; set; }
-		public string Password { get; set; }
+		public TokenRequestCommandValidator()
+		{
+			RuleFor(x => x.Email)
+				.NotEmpty().WithMessage(Constants.ErrorMessages.EmptyEmail)
+				.Matches(Constants.Validators.EmailRegex).WithMessage(Constants.ErrorMessages.InvalidEmailFormat);
+				
+			RuleFor(x => x.Password)
+				.NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPassword)
+				.Matches(Constants.Validators.PasswordRegex).WithMessage(Constants.ErrorMessages.InvalidPasswordFormat);
+		}
 	}
 
-	public partial interface IIdentityService
-    {
-        public Task<string> GenerateAuthToken(string email, string password);
-    }
+	public class TokenRequestCommandHandler : IRequestHandler<TokenRequestCommand, string>
+	{
+		private readonly IIdentityService _identityService;
 
-    public partial class IdentityService : IIdentityService
+		public TokenRequestCommandHandler(IIdentityService identityService)
+		{
+			_identityService = identityService ?? throw new NullReferenceException(nameof(IdentityError));
+		}
+
+		public async Task<string> Handle(TokenRequestCommand request, CancellationToken cancellationToken)
+		{
+			return await _identityService.GenerateAuthTokenAsync(request);
+		}
+	}
+
+    public  class IdentityService : IIdentityService
     {
         private readonly IOptions<JwtOptions> _jwtOptions;
         private readonly ILogger<IdentityService> _logger;
@@ -45,12 +63,12 @@ public partial class GenerateToken : BaseController
 			_userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
         }
 
-        public async Task<string> GenerateAuthToken(string email, string password)
+        public async Task<string> GenerateAuthTokenAsync(TokenRequestCommand tokenRequest)
         {
             try
             {
-                var user = await _userManager.FindByEmailAsync(email);
-				var passwordCheck = _passwordHasher.VerifyPassword(user, password);
+                var user = await _userManager.FindByEmailAsync(tokenRequest.Email);
+				var passwordCheck = _passwordHasher.VerifyPassword(user, tokenRequest.Password);
 
 				if (user != null && passwordCheck)
                 {
@@ -60,7 +78,7 @@ public partial class GenerateToken : BaseController
 
                     var claims = new[]
                     {
-                        new Claim(ClaimTypes.Email, email),
+                        new Claim(ClaimTypes.Email, tokenRequest.Email),
                     };
 
                     foreach (var role in userRoles)
@@ -79,7 +97,7 @@ public partial class GenerateToken : BaseController
                     return new JwtSecurityTokenHandler().WriteToken(token);
                 }
 
-                _logger.LogInformation("Invalid credentials for user with email: {0}", email);
+                _logger.LogInformation("Invalid credentials for user with email: {0}", tokenRequest.Email);
 				throw new Exception(Constants.ErrorMessages.InvalidCredentials);
             }
             catch (Exception ex)
@@ -89,5 +107,15 @@ public partial class GenerateToken : BaseController
             }
         }
     }
-}
 
+	public interface IIdentityService
+	{
+		public Task<string> GenerateAuthTokenAsync (TokenRequestCommand tokenRequest);
+	}
+
+	public class TokenRequestCommand:IRequest<string>
+	{
+		public string Email { get; set; } = default!;
+		public string Password { get; set; } = default!;
+	}
+}

@@ -13,4 +13,3 @@ public static class SplitOptionsRuleCollection
 			.RuleFor(x => x.TreatmentName, f => f.Random.Word());
 	}
 }
-

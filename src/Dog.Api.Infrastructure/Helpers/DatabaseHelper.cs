@@ -17,12 +17,13 @@ public class DatabaseHelper
     {
         try
         {
-			if (_identityContext.Database.IsInMemory()) {
+			if (_identityContext.Database.IsInMemory()) 
+			{
 				_identityContext.Database.EnsureDeleted();
 			}
 			
             _identityContext.Database.EnsureCreated();
-            _logger.LogInformation("Database successfully created");
+            _logger.LogInformation(Constants.SuccessMessages.DatabaseCreated);
         }
         catch (Exception ex)
         {
@@ -40,14 +41,14 @@ public class DatabaseHelper
 
             var roles = new List<Role>
             {
-                new Role { Id = Guid.Parse(Constants.AdminRole.Id), Name = Constants.AdminRole.Admin, NormalizedName = Constants.AdminRole.Admin.ToUpper() },
-                new Role { Id = Guid.Parse(Constants.UserRole.Id), Name = Constants.UserRole.User, NormalizedName = Constants.UserRole.User.ToUpper() }
+                new Role { Id = Guid.Parse(AdminRole.Id), Name = AdminRole.Name, NormalizedName = AdminRole.NormalizedName },
+                new Role { Id = Guid.Parse(UserRole.Id), Name = UserRole.Name, NormalizedName = UserRole.NormalizedName }
             };
 
             var users = new List<User>
             {
-                new User { Id = Guid.Parse(Constants.User.Id), FirstName = "Bob", LastName = "Smith", Email = Constants.User.Email, UserName = Constants.User.Email, SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = Constants.User.Email.ToUpper() },
-                new User { Id = Guid.Parse(Constants.AdminUser.Id), FirstName = "Rob", LastName = "Perth", Email = Constants.AdminUser.Email, UserName = Constants.AdminUser.Email, SecurityStamp = Guid.NewGuid().ToString(), NormalizedEmail = Constants.AdminUser.Email.ToUpper() },
+                new User { Id = Guid.Parse(BasicUser.Id), FirstName = BasicUser.FirstName, LastName = BasicUser.LastName, Email = BasicUser.Email, UserName = BasicUser.Email, SecurityStamp = BasicUser.SecurityStamp, NormalizedUserName = BasicUser.NormalizedEmail, NormalizedEmail = BasicUser.NormalizedEmail },
+                new User { Id = Guid.Parse(AdminUser.Id), FirstName = AdminUser.FirstName, LastName = AdminUser.LastName, Email = AdminUser.Email, UserName = AdminUser.Email, SecurityStamp = AdminUser.SecurityStamp, NormalizedUserName = AdminUser.NormalizedEmail, NormalizedEmail = AdminUser.NormalizedEmail },
             };
 
             if (!_identityContext.Roles.Any())
@@ -64,23 +65,23 @@ public class DatabaseHelper
             {
                 foreach (var user in users)
                 {
-                    if (string.Equals(user.Email, Constants.AdminUser.Email, StringComparison.OrdinalIgnoreCase))
+                    if (string.Equals(user.Email, AdminUser.Email, StringComparison.OrdinalIgnoreCase))
                     {
-                        user.PasswordHash = _passwordHasher.HashPassword(user, Constants.AdminUser.Password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, AdminUser.Password);
                         await userStore.CreateAsync(user);
-                        await userStore.AddToRoleAsync(user, Constants.AdminRole.Admin.ToUpper());
+                        await userStore.AddToRoleAsync(user, AdminRole.NormalizedName);
                     }
                     else
                     {
-                        user.PasswordHash = _passwordHasher.HashPassword(user, Constants.User.Password);
+                        user.PasswordHash = _passwordHasher.HashPassword(user, BasicUser.Password);
                         await userStore.CreateAsync(user);
-                        await userStore.AddToRoleAsync(user, Constants.UserRole.User.ToUpper());
+                        await userStore.AddToRoleAsync(user, UserRole.NormalizedName);
                     }
                 }
             }
 
             _identityContext.SaveChanges();
-			_logger.LogInformation("Database successfully seeded");
+			_logger.LogInformation(Constants.SuccessMessages.DatabaseSeeded);
         }
         catch (Exception ex) 
         {

@@ -19,7 +19,7 @@ public class DogApiClient
 
     public async Task GetAuthTokenAsync(string email, string password)
     {
-        var request = await _client.PostAsJsonAsync("/GenerateToken", new GenerateToken.TokenRequest { Email = email, Password = password });
+        var request = await _client.PostAsJsonAsync("/GenerateToken", new GenerateTokenController.TokenRequestCommand { Email = email, Password = password });
 
         if (request.IsSuccessStatusCode)
         {

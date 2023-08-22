@@ -17,4 +17,3 @@ public class SharedFixture
 		_modelFakerFixture = new ModelFakerFixture();
 	}
 }
-

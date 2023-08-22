@@ -2,8 +2,7 @@
 
 public static class RoleRuleCollection
 {
-    public static Faker<TRole> ApplyRoleRules<TRole>(this Faker<TRole> faker) 
-        where TRole: Role
+    public static Faker<TRole> ApplyRoleRules<TRole>(this Faker<TRole> faker) where TRole: Role
     {
         return faker
             .RuleFor(x => x.Id, f => f.Random.Uuid())
@@ -11,4 +10,3 @@ public static class RoleRuleCollection
             .RuleFor(X => X.NormalizedName, _ => "Admin");
     }
 }
-

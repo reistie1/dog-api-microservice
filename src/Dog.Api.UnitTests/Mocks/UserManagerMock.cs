@@ -17,4 +17,3 @@ public static class UserManagerMock
             new Mock<ILogger<UserManager<TUser>>>().Object);
     }
 }
-

@@ -2,9 +2,9 @@
 
 public class DatabaseHelperTests : IClassFixture<SharedFixture>
 {
-	private readonly SharedFixture _sharedFixture;
 	private readonly ILogger<DatabaseHelper> _logger;
 	private readonly Mock<IPasswordHasher> _passwordHasherMock;
+	private readonly SharedFixture _sharedFixture;
 
 	public DatabaseHelperTests(SharedFixture sharedFixture)
 	{
@@ -38,10 +38,11 @@ public class DatabaseHelperTests : IClassFixture<SharedFixture>
 	{
 		var identityContext = _sharedFixture.DatabaseFixture.CreateIdentityContext();
 		var databaseHelper = new DatabaseHelper(identityContext, _logger, new PasswordHasher());
+
 		databaseHelper.CreateDatabase();
 		await databaseHelper.SeedData();
 
-		identityContext.Roles.Should().Contain(x => x.Name == Constants.AdminRole.Admin);
+		identityContext.Roles.Should().Contain(x => x.Name == Constants.AdminRole.Name);
 		identityContext.Users.Should().Contain(x => x.Email == Constants.AdminUser.Email);
 	}
 

@@ -14,7 +14,6 @@ public class FeatureFlagControllerTests : BaseTest, IClassFixture<SharedFixture>
 		var response = await ApiClient.GetFeatureFlagStatusAsync();
 
 		response.Should().NotBeNull();
-		response.Should().Match("Feature Flag is active");
+		response.Should().Match(Constants.FeatureFlag.Active);
 	}
 }
-

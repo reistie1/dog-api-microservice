@@ -9,4 +9,3 @@ public static class ListResponseBreedImagesRuleCollection
 			.RuleFor(x => x.Count, f => f.Random.Number());
 	}
 }
-

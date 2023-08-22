@@ -10,4 +10,3 @@ public static class RandomBreedImageByBreedRuleCollection
             .RuleFor(x => x.Breed, _ => "hound");
     }
 }
-

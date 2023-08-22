@@ -20,10 +20,10 @@ public class FeatureFlagController : BaseController
 
         if (result)
         {
-            return Ok("Feature Flag is active");
+            return Ok(Constants.FeatureFlag.Active);
         }
 
-        return Ok("Feature Flag is inactive");
+        return Ok(Constants.FeatureFlag.Inactive);
     }
 
     public class FeatureFlagCommand : IRequest<bool>

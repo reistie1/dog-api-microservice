@@ -22,7 +22,7 @@ public class PasswordHasherTests : IClassFixture<SharedFixture>
 	[Fact]
 	public void HashPasword_ShouldFail()
 	{
-		_sharedFixture.Invoking(x => x.PasswordHasher.HashPassword(null, "Password1!")).Should().Throw<ErrorResult>().WithMessage("User cannot be null");
+		_sharedFixture.Invoking(x => x.PasswordHasher.HashPassword(null, "Password1!")).Should().Throw<ErrorResult>().WithMessage(Constants.ErrorMessages.EmptyUser);
 	}
 
 	[Fact]
@@ -54,4 +54,3 @@ public class PasswordHasherTests : IClassFixture<SharedFixture>
 		result.Should().BeFalse();
 	}
 }
-

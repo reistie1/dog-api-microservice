@@ -14,4 +14,3 @@ public class SharedFixture
         _testServerFixture = new TestServerFixture();
     }
 }
-

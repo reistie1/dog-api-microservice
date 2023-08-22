@@ -1,4 +1,5 @@
 ﻿namespace Dog.Api.TestFramework.RuleCollections;
+
 public static class ListAllBreedsRuleCollection 
 {
     public static Faker<TCommand> ApplyListAllBreedRules<TCommand>(this Faker<TCommand> faker) where TCommand : ListAllDogBreedsCommand

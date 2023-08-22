@@ -17,4 +17,3 @@ public static class UserRuleCollection
             .RuleFor(x => x.UserName, f => f.Person.UserName);
     }
 }
-

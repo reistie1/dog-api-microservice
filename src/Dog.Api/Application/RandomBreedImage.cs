@@ -3,7 +3,7 @@
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public partial class RandomBreedImageController : BaseController
+public class RandomBreedImageController : BaseController
 {
     private readonly IMediator _mediator;
 
@@ -50,11 +50,6 @@ public class RandomBreedImageService : IRandomBreedImageService
     {
         var response = await _httpClient.GetStringAsync("breeds/image/random");
         var result = JsonSerializer.Deserialize<Response<string>>(response);
-
-        if (result != null)
-        {
-            return result;
-        }
 
         return result;
     }

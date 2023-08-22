@@ -3,17 +3,9 @@
 [CollectionDefinition("ListAllBreedsCollection", DisableParallelization = true)]
 [Collection("ListAllBreedsCollection")]
 public class ListAllBreedsControllerTests : BaseTest, IClassFixture<SharedFixture>
-	{
+{
 	public ListAllBreedsControllerTests(SharedFixture sharedFixture) : base(sharedFixture.TestServerFixture)
-	{
-	}
-
-	[Fact]
-	public async Task ListAllDogBreeds_ShouldFailWhenNotInAdminRole()
-	{
-		await ApiClient.GetAuthTokenAsync(Constants.User.Email, Constants.User.Password);
-		await ApiClient.Invoking(x => x.GetListAllBreedsAsync(1, 10)).Should().ThrowAsync<HttpRequestException>();
-	}
+	{}
 
 	[Fact]
 	public async Task ListAllDogBreeds_ShouldPassWithAdminRoleAndNoSearch()
@@ -36,5 +28,11 @@ public class ListAllBreedsControllerTests : BaseTest, IClassFixture<SharedFixtur
 		result.Should().HaveCount(1);
 		result.Should().BeOfType<List<Breeds>>();
 	}
-}
 
+	[Fact]
+	public async Task ListAllDogBreeds_ShouldFailWhenNotInAdminRole()
+	{
+		await ApiClient.GetAuthTokenAsync(Constants.User.Email, Constants.User.Password);
+		await ApiClient.Invoking(x => x.GetListAllBreedsAsync(1, 10)).Should().ThrowAsync<HttpRequestException>();
+	}
+}

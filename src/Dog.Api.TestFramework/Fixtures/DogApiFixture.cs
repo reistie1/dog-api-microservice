@@ -2,8 +2,8 @@
 
 public class DogApiFixture
 {
-    private HttpClient _factory = default!;
-    private bool _disposedValue;
+	private bool _disposedValue;
+	private HttpClient _factory = default!;
 
     public HttpClient CreateClient() 
     {
@@ -16,12 +16,14 @@ public class DogApiFixture
         return _factory;
     }
 
-    public void Dispose() {
+    public void Dispose() 
+	{
         Dispose(true);
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing) {
+    protected virtual void Dispose(bool disposing) 
+	{
         if(_disposedValue) {
             return;
         }

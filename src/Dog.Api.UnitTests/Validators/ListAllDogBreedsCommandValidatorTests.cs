@@ -1,14 +1,14 @@
 namespace Dog.Api.UnitTests.Validators;
 
-public class ListAllDogBreedsCommandValidators 
+public class ListAllDogBreedsCommandValidatorTests : IClassFixture<SharedFixture>
 {
-    private readonly ListAllDogBreedsCommandValidator _validator;
-    private readonly SharedFixture _sharedFixture;
+	private readonly SharedFixture _sharedFixture;
+	private readonly ListAllDogBreedsCommandValidator _validator;
 
-    public ListAllDogBreedsCommandValidators() 
+    public ListAllDogBreedsCommandValidatorTests(SharedFixture sharedFixture) 
     {
-        _validator = new ListAllDogBreedsCommandValidator();
-        _sharedFixture = new SharedFixture();
+		_sharedFixture = sharedFixture;
+		_validator = new ListAllDogBreedsCommandValidator();
     }
 
     [Fact]

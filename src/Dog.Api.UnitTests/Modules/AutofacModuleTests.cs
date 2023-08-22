@@ -1,11 +1,11 @@
 ﻿namespace Dog.Api.UnitTests.Modules;
 
 public class AutofacModuleTests
-	{
+{
 	private readonly ILifetimeScope _scope;
 
 	public AutofacModuleTests()
-		{
+	{
 		var serviceCollection = new ServiceCollection();
 		var config = new ConfigurationBuilder()
 			.AddJsonFile($"appsettings.Test.json", false)
@@ -19,7 +19,7 @@ public class AutofacModuleTests
 		var container = builder.Build();
 
 		_scope = container.BeginLifetimeScope("httpRequest");
-		}
+	}
 
 	[Fact]
 	public void RegisterOptions_ShouldPass()
@@ -33,4 +33,3 @@ public class AutofacModuleTests
 		logger.Should().NotBeNull();
 	}
 }
-

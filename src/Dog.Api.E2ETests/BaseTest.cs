@@ -9,8 +9,8 @@ public abstract class BaseTest : IDisposable, IAsyncLifetime
         _testServerfixture = testServerFixture ?? throw new ArgumentNullException(nameof(testServerFixture));
     }
 
-    protected HttpClient Client { get; set; } = default!;
-    protected DogApiClient ApiClient { get; set; } = default!;
+	protected DogApiClient ApiClient { get; set; } = default!;
+	protected HttpClient Client { get; set; } = default!;
 
     public virtual Task InitializeAsync()
     {
@@ -43,4 +43,3 @@ public abstract class BaseTest : IDisposable, IAsyncLifetime
         Client = null;
     }
 }
-

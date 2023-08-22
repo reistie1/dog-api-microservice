@@ -2,8 +2,8 @@
 
 public class AutofacModule : Module
 {
-    private readonly IServiceCollection _services;
 	private readonly IConfigurationRoot _config;
+	private readonly IServiceCollection _services;
 
 	public AutofacModule(IServiceCollection services, string environment, IConfigurationRoot config)
     {
@@ -27,10 +27,9 @@ public class AutofacModule : Module
         identityOptions.Lockout.MaxFailedAccessAttempts = 5;
         identityOptions.Lockout.AllowedForNewUsers = true;
 
-        // User settings.
-        identityOptions.User.AllowedUserNameCharacters =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-        identityOptions.User.RequireUniqueEmail = false;
+		// User settings.
+        identityOptions.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+		identityOptions.User.RequireUniqueEmail = true;
 
 		// Configuration
 		builder.RegisterInstance<IConfiguration>(_config);
@@ -114,7 +113,7 @@ public class AutofacModule : Module
             .InstancePerLifetimeScope();
 
         // Interfaces
-        builder.RegisterType<GenerateToken.IdentityService>()
+        builder.RegisterType<GenerateTokenController.IdentityService>()
             .AsImplementedInterfaces()
             .InstancePerLifetimeScope();
         builder.RegisterType<ListAllBreedsService>()
@@ -154,6 +153,7 @@ public class AutofacModule : Module
 		// Validators
 		builder.RegisterType<ListAllDogBreedsCommandValidator>().As<IValidator<ListAllDogBreedsCommand>>().InstancePerDependency();
 		builder.RegisterType<RandomBreedImageByBreedCommandValidator>().As<IValidator<RandomBreedImageByBreedCommand>>().InstancePerDependency().SingleInstance();
+		builder.RegisterType<GenerateTokenController.TokenRequestCommandValidator>().As<IValidator<GenerateTokenController.TokenRequestCommand>>().InstancePerDependency().SingleInstance();
 
         // JsonSerializer Options
         new JsonSerializerOptions()

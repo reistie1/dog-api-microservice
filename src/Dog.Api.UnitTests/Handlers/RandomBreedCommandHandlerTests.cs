@@ -1,7 +1,7 @@
 ﻿namespace Dog.Api.UnitTests.Handlers;
 
 public class RandomBreedCommandHandlerTests : IClassFixture<SharedFixture>
-	{
+{
 	private readonly Response<string> _result;
 	private readonly Mock<IRandomBreedImageService> _randomBreedImageServiceMock;
 
@@ -23,4 +23,3 @@ public class RandomBreedCommandHandlerTests : IClassFixture<SharedFixture>
 		result.Should().Be(_result);
 	}
 }
-

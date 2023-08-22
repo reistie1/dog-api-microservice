@@ -29,4 +29,3 @@ public class FeatureFlagHandlerTests
 		result.Should().BeFalse();
 	}
 }
-

@@ -31,4 +31,3 @@ public class RandomBreedImageByBreedServiceTests : BaseTest, IClassFixture<Share
 		await service.Invoking(x => x.RandomBreedImageByBreed(model)).Should().ThrowAsync<HttpRequestException>();
 	}
 }
-

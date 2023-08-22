@@ -3,7 +3,7 @@
 [Authorize]
 [ApiController]
 [Route("[controller]")]
-public partial class RandomBreedImageByBreedController : BaseController
+public class RandomBreedImageByBreedController : BaseController
 {
     private readonly IMediator _mediator;
 
