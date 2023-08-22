@@ -41,8 +41,8 @@ jobs:
       - name: Copy Code Coverage Results
         run: cp coverage/**/coverage.cobertura.xml coverage.cobertura.xml
 
-      - name: Copy Code Coverage Results
-        run: cp coverages/**/coverage.cobertura.xml coverage.cobertura.xml
+      # - name: Copy Code Coverage Results
+      #   run: cp coverages/**/coverage.cobertura.xml coverage.cobertura.xml
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v3
