@@ -21,7 +21,7 @@ jobs:
       
       - name: Create Build Number
         run: |
-          echo "BUILD_NUMBER=${{github.run_number}}-${{github.run_id}}-${{github.run_attempt}}"
+          echo "BUILD_NUMBER=${{GITHUB.run_number}}-${{GITHUB.run_id}}-${{GITHUB.run_attempt}}"
 
       - name: Restore
         run: dotnet restore src/DogApiMicroservice.sln
