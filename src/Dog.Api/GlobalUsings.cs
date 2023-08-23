@@ -34,4 +34,3 @@ global using Dog.Api.Dtos;
 global using Dog.Api.Modules;
 global using Dog.Api.Infrastructure.Contexts;
 global using Dog.Api.Infrastructure.Helpers;
-

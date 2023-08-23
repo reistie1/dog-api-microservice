@@ -1,3 +1,5 @@
+using Dog.Api.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var environment = builder.Environment.EnvironmentName;
@@ -21,7 +23,6 @@ Log.Logger = logger;
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<IdentityContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
 
 builder.Services.AddSwaggerGen(c => {
 	c.SwaggerDoc("v1", new OpenApiInfo { Title = "Dog Microservice", Version = "v1" });
@@ -89,6 +90,7 @@ if (builder.Environment.IsDevelopment())
 	app.UseHsts();
 }
 
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {

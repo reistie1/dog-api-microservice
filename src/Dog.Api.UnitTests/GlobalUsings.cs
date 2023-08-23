@@ -1,5 +1,6 @@
 global using Microsoft.AspNetCore.Authorization;
 global using Microsoft.AspNetCore.Identity;
+global using Microsoft.AspNetCore.Http;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ global using Dog.Api.Core.Options;
 global using Dog.Api.Dtos;
 global using Dog.Api.Infrastructure.Contexts;
 global using Dog.Api.Infrastructure.Helpers;
+global using Dog.Api.Middleware;
 global using Dog.Api.Modules;
 global using Dog.Api.TestFramework;
 global using Dog.Api.TestFramework.Fixtures;

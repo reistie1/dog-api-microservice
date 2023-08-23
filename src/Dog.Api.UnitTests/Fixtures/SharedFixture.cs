@@ -1,4 +1,5 @@
 ﻿namespace Dog.Api.UnitTests.Fixtures;
+
 public class SharedFixture 
 {
 	private static readonly DatabaseFixture _databaseFixture;

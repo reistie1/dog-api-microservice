@@ -1,4 +1,6 @@
-﻿namespace Dog.Api.Modules;
+﻿using MediatR.Pipeline;
+
+namespace Dog.Api.Modules;
 
 public class AutofacModule : Module
 {
@@ -104,30 +106,27 @@ public class AutofacModule : Module
             .WithRegistrationScope(RegistrationScope.Scoped)
             .Build());
 
-        // MediatR pipeline middlewares
-        builder.RegisterGeneric(typeof(ValidationBehaviour<,>))
-            .As(typeof(IPipelineBehavior<,>))
-            .InstancePerLifetimeScope();
-        builder.RegisterGeneric(typeof(ErrorBehaviour<,>))
-            .As(typeof(IPipelineBehavior<,>))
-            .InstancePerLifetimeScope();
+		// MediatR pipeline middlewares	
+		builder.RegisterGeneric(typeof(ValidationBehaviour<,>))
+			.As(typeof(IPipelineBehavior<,>))
+			.InstancePerLifetimeScope();
 
-        // Interfaces
-        builder.RegisterType<GenerateTokenController.IdentityService>()
-            .AsImplementedInterfaces()
-            .InstancePerLifetimeScope();
-        builder.RegisterType<ListAllBreedsService>()
-            .AsImplementedInterfaces()
-            .InstancePerLifetimeScope();
-        builder.RegisterType<RandomBreedImageByBreedService>()
-            .AsImplementedInterfaces()
-            .InstancePerLifetimeScope();
-        builder.RegisterType<RandomBreedImageService>()
-            .AsImplementedInterfaces()
-            .InstancePerLifetimeScope();
-        builder.RegisterType<FeatureFlagController.FeatureFlagService>()
-            .AsImplementedInterfaces()
-            .InstancePerLifetimeScope();
+		// Interfaces
+		builder.RegisterType<GenerateTokenController.IdentityService>()
+			.AsImplementedInterfaces()
+			.InstancePerLifetimeScope();
+		builder.RegisterType<ListAllBreedsService>()
+			.AsImplementedInterfaces()
+			.InstancePerLifetimeScope();
+		builder.RegisterType<RandomBreedImageByBreedService>()
+			.AsImplementedInterfaces()
+			.InstancePerLifetimeScope();
+		builder.RegisterType<RandomBreedImageService>()
+			.AsImplementedInterfaces()
+			.InstancePerLifetimeScope();
+		builder.RegisterType<FeatureFlagController.FeatureFlagService>()
+			.AsImplementedInterfaces()
+			.InstancePerLifetimeScope();
 		builder.RegisterType<PasswordHasher>()
 			.AsImplementedInterfaces()
 			.InstancePerLifetimeScope();

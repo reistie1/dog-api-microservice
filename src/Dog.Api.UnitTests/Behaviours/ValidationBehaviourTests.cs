@@ -1,5 +1,7 @@
 ﻿namespace Dog.Api.UnitTests.Behaviours;
 
+[CollectionDefinition("BehaviorCollection", DisableParallelization = true)]
+[Collection("BehaviorCollection")]
 public class ValidationBehaviourTests :IClassFixture<SharedFixture>
 {
 	private readonly SharedFixture _sharedFixture;

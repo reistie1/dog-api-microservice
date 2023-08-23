@@ -23,7 +23,7 @@ public class RandomBreedImageByBreedControllerTests:BaseTest, IClassFixture<Shar
 	[Fact]
 	public async Task RandomBreedImageByBreed_ShouldFailWithInvalidBreed()
 	{
-		await ApiClient.Invoking(x => x.GetRandomBreedImageByBreedAsync(1, 10, "cat")).Should().ThrowAsync<ErrorResult>();
+		await ApiClient.Invoking(x => x.GetRandomBreedImageByBreedAsync(1, 10, "cat")).Should().ThrowAsync<HttpRequestException>();
 	}
 }
 

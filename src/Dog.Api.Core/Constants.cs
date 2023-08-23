@@ -28,8 +28,8 @@ public static class Constants
 		public const string EmptyPassword = "Password cannot be empty";
 		public const string EmptyUser = "User cannot be null";
 		public const string InvalidCredentials = "Error generating token, credentials invalid";
-		public const string InvalidEmailFormat = "Invalid email format";
-		public const string InvalidPasswordFormat = "Invalid password format, password must contain at least one lowercase, uppercase, symbol, number and be a6 characters long";
+		public const string InvalidEmailFormat = "Invalid email format, allowed characters are: a-zA-Z0-9-._@+";
+		public const string InvalidPasswordFormat = "Invalid password format, password must contain at least one lowercase, uppercase, symbol, number and be 6 characters long";
         public const string InvalidRoleRequirement = "Invalid role requirement, you must be an admin to access this resource";
         public const string InvalidSearchFormat = "Search value is invalid";
         public const string PageNumberTooSmall = "Page number should be greater than or equal to 1";

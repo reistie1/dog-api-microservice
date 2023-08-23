@@ -13,7 +13,7 @@ public class GenerateTokenController : BaseController
 
     [AllowAnonymous]
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
+	[ProducesResponseType(StatusCodes.Status200OK, Type = typeof(string))]
     public async Task<ActionResult> GenerateTokenAsync([FromBody] TokenRequestCommand tokenRequest)
     {
         return Ok(await _mediator.Send(tokenRequest));
@@ -24,11 +24,12 @@ public class GenerateTokenController : BaseController
 		public TokenRequestCommandValidator()
 		{
 			RuleFor(x => x.Email)
-				.NotEmpty().WithMessage(Constants.ErrorMessages.EmptyEmail)
+				.NotEmpty().WithMessage(Constants.ErrorMessages.EmptyEmail).WithSeverity(Severity.Warning)
 				.Matches(Constants.Validators.EmailRegex).WithMessage(Constants.ErrorMessages.InvalidEmailFormat);
-				
+
+
 			RuleFor(x => x.Password)
-				.NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPassword)
+				.NotEmpty().WithMessage(Constants.ErrorMessages.EmptyPassword).WithSeverity(Severity.Warning)
 				.Matches(Constants.Validators.PasswordRegex).WithMessage(Constants.ErrorMessages.InvalidPasswordFormat);
 		}
 	}
@@ -65,46 +66,38 @@ public class GenerateTokenController : BaseController
 
         public async Task<string> GenerateAuthTokenAsync(TokenRequestCommand tokenRequest)
         {
-            try
+            var user = await _userManager.FindByEmailAsync(tokenRequest.Email);
+			var passwordCheck = _passwordHasher.VerifyPassword(user, tokenRequest.Password);
+
+			if (user != null && passwordCheck)
             {
-                var user = await _userManager.FindByEmailAsync(tokenRequest.Email);
-				var passwordCheck = _passwordHasher.VerifyPassword(user, tokenRequest.Password);
+                var userRoles = await _userManager.GetRolesAsync(user);
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SigningKey));
+                var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-				if (user != null && passwordCheck)
+                var claims = new[]
                 {
-                    var userRoles = await _userManager.GetRolesAsync(user);
-                    var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Value.SigningKey));
-                    var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                    new Claim(ClaimTypes.Email, tokenRequest.Email),
+                };
 
-                    var claims = new[]
-                    {
-                        new Claim(ClaimTypes.Email, tokenRequest.Email),
-                    };
-
-                    foreach (var role in userRoles)
-                    {
-                        claims[claims.Length - 1] = new Claim(ClaimTypes.Role, role);
-                    }
-
-                    var token = new JwtSecurityToken(
-                        _jwtOptions.Value.Issuer,
-                        _jwtOptions.Value.Audience,
-                        claims,
-                        expires: DateTime.Now.AddMinutes(_jwtOptions.Value.ExpiryTime),
-                        signingCredentials: credentials
-                    );
-
-                    return new JwtSecurityTokenHandler().WriteToken(token);
+                foreach (var role in userRoles)
+                {
+                    claims[claims.Length - 1] = new Claim(ClaimTypes.Role, role);
                 }
 
-                _logger.LogInformation("Invalid credentials for user with email: {0}", tokenRequest.Email);
-				throw new Exception(Constants.ErrorMessages.InvalidCredentials);
+                var token = new JwtSecurityToken(
+                    _jwtOptions.Value.Issuer,
+                    _jwtOptions.Value.Audience,
+                    claims,
+                    expires: DateTime.Now.AddMinutes(_jwtOptions.Value.ExpiryTime),
+                    signingCredentials: credentials
+                );
+
+                return new JwtSecurityTokenHandler().WriteToken(token);
             }
-            catch (Exception ex)
-            {
-                _logger.LogError($"Error creating authentication token, Message: {0}, Exception: {1}", ex.Message, ex.InnerException);
-                throw new ErrorResult(ex.Message, ex);
-            }
+
+            _logger.LogInformation("Invalid credentials for user with email: {0}", tokenRequest.Email);
+			throw new ErrorResult(StatusCodes.Status400BadRequest, Constants.ErrorMessages.InvalidCredentials);
         }
     }
 

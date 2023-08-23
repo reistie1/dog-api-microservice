@@ -19,7 +19,7 @@ public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TReque
 
             if (failures.Count > 0)
             {
-                throw new ErrorResult(StatusCodes.Status400BadRequest.ToString(), "Validation Error", failures.Select(x => x.ErrorMessage).ToList());
+				throw new ErrorResult(StatusCodes.Status400BadRequest, "Validation Error", failures.ToDictionary(x => x.PropertyName, y => y.ErrorMessage));
             }
         }
 

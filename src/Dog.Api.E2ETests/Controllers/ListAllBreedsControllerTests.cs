@@ -5,7 +5,8 @@
 public class ListAllBreedsControllerTests : BaseTest, IClassFixture<SharedFixture>
 {
 	public ListAllBreedsControllerTests(SharedFixture sharedFixture) : base(sharedFixture.TestServerFixture)
-	{}
+	{
+	}
 
 	[Fact]
 	public async Task ListAllDogBreeds_ShouldPassWithAdminRoleAndNoSearch()
